@@ -47,6 +47,8 @@ module PryStackExplorer
     # remove internal frames related to setting up the session
     def remove_internal_frames(bindings)
       start_frames = internal_frames_with_indices(bindings)
+      return bindings if start_frames.empty?
+
       start_frame_index = start_frames.first.last
 
       if start_frames.size >= 2
@@ -58,15 +60,23 @@ module PryStackExplorer
       bindings.drop(start_frame_index + 1)
     end
 
-    # remove pry-nav / pry-debugger / pry-byebug frames
+    # remove debugger frames
     def remove_debugger_frames(bindings)
-      bindings.drop_while { |b| b.eval("__FILE__") =~ /pry-(?:nav|debugger|byebug)/ }
+      bindings.drop_while { |b| debugger_frame?(b) }
     end
 
     # binding.pry frame
     # @return [Boolean]
     def pry_method_frame?(binding)
       safe_send(binding.eval("__method__"), :==, :pry)
+    end
+
+    # debugger frame
+    #   pry / pry-nav / pry-debugger / pry-byebug / byebug / spring / .pry
+    # @return [Boolean]
+    def debugger_frame?(binding)
+      binding.eval("__FILE__") =~
+        %r{/gems/(?:pry|pry-(?:nav|debugger|byebug)|byebug|spring)-|/.pryrc$}
     end
 
     # When a pry session is started within a pry session
