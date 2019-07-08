@@ -1,5 +1,4 @@
 module PryStackExplorer
-
   # This class represents a call-stack. It stores the
   # frames that make up the stack and is responsible for updating the
   # associated Pry instance to reflect the active frame. It is fully Enumerable.
@@ -69,7 +68,6 @@ module PryStackExplorer
     # Note that indexing base is `0`
     # @param [Fixnum] index The index of the frame.
     def change_frame_to(index, run_whereami=true)
-
       set_binding_index_safely(index)
 
       if @pry.binding_stack.empty?
@@ -80,6 +78,5 @@ module PryStackExplorer
 
       @pry.run_command "whereami" if run_whereami
     end
-
   end
 end

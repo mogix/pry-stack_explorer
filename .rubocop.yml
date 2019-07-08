@@ -1,0 +1,324 @@
+# ================================================================
+#
+#   .rubocop.yml
+#
+# ================================================================
+
+
+require:
+  - rubocop-performance
+
+
+# ---+---+---+---+---+---+---
+#
+#   AllCops rules
+#
+# ---+---+---+---+---+---+---
+
+AllCops:
+  TargetRubyVersion: 2.6.3
+  Exclude:
+    - 'bundle_bin/**/*'
+    - 'examples/*.rb'
+    - 'tester.rb'
+
+
+# ---+---+---+---+---+---+---
+#
+#   Lint rules
+#
+# ---+---+---+---+---+---+---
+
+Lint/AssignmentInCondition:
+  Enabled: false
+
+Lint/HandleExceptions:
+  Enabled: false
+
+Lint/RescueException:
+  Enabled: false
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Lint/Void:
+  Exclude:
+    - 'test/*.rb'
+
+Lint/UselessAssignment:
+  Exclude:
+    - 'Rakefile'
+
+Lint/UnderscorePrefixedVariableName:
+  Enabled: false
+
+
+# ---+---+---+---+---+---+---
+#
+#   Gemspec rules
+#
+# ---+---+---+---+---+---+---
+
+Gemspec/OrderedDependencies:
+  Enabled: false
+
+
+# ---+---+---+---+---+---+---
+#
+#   Layout rules
+#
+# ---+---+---+---+---+---+---
+
+Layout/LeadingCommentSpace:
+  Enabled: false
+
+Layout/ConditionPosition:
+  Enabled: false
+
+Layout/SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
+
+Layout/AlignArguments:
+  Exclude:
+    - '*.gemspec'
+    - 'test/**/*.rb'
+
+Layout/AlignHash:
+  Enabled: false
+
+Layout/AlignArray:
+  Enabled: false
+
+Layout/SpaceInsideParens:
+  Enabled: false
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+Layout/SpaceAroundOperators:
+  Enabled: false
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+Layout/SpaceAfterComma:
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Layout/EmptyLineBetweenDefs:
+  Enabled: false
+
+Layout/EmptyLines:
+  Enabled: false
+
+Layout/IndentHeredoc:
+  Enabled: false
+
+
+# ---+---+---+---+---+---+---
+#
+#   Style rules
+#
+# ---+---+---+---+---+---+---
+
+Style/Documentation:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/CharacterLiteral:
+  Enabled: false
+
+Style/NumericLiteralPrefix:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: false
+
+Style/UnneededInterpolation:
+  Enabled: false
+
+Style/UnneededPercentQ:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/WhileUntilModifier:
+  Enabled: false
+
+Style/MultilineIfThen:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/AccessModifierDeclarations:
+  Enabled: false
+
+Style/ExpandPathArguments:
+  Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
+
+Style/PreferredHashMethods:
+  Enabled: false
+
+Style/SpecialGlobalVars:
+  Enabled: false
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Style/StderrPuts:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/SingleLineMethods:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/FormatString:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/RedundantReturn:
+  Enabled: false
+
+Style/ClassVars:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/YodaCondition:
+  Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false
+
+Style/RescueStandardError:
+  Enabled: false
+
+Style/NilComparison:
+  Exclude:
+    - 'test/*.rb'
+
+
+# ---+---+---+---+---+---+---
+#
+#   Naming rules
+#
+# ---+---+---+---+---+---+---
+
+Naming/FileName:
+  Enabled: false
+
+Naming/ConstantName:
+  Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+
+# ---+---+---+---+---+---+---
+#
+#   Performance rules
+#
+# ---+---+---+---+---+---+---
+
+Performance/RegexpMatch:
+  Enabled: false
+
+Performance/StringReplacement:
+  Enabled: false
+
+
+# ---+---+---+---+---+---+---
+#
+#   Performance rules
+#
+# ---+---+---+---+---+---+---
+
+Security/JSONLoad:
+  Enabled: false
+
+
+# ---+---+---+---+---+---+---
+#
+#   Metrics rules
+#
+# ---+---+---+---+---+---+---
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 50
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Enabled: false
+
+
+#[EOF]

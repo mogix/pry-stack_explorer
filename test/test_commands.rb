@@ -3,7 +3,7 @@ require 'helper'
 
 class Top
   attr_accessor :method_list, :middle
-  def initialize method_list
+  def initialize(method_list)
     @method_list = method_list
   end
   def bing
@@ -14,7 +14,7 @@ end
 
 class Middle
   attr_accessor :method_list, :bottom
-  def initialize method_list
+  def initialize(method_list)
     @method_list = method_list
   end
   def bong
@@ -25,7 +25,7 @@ end
 
 class Bottom
   attr_accessor :method_list
-  def initialize method_list
+  def initialize(method_list)
     @method_list = method_list
   end
   def bang
@@ -35,7 +35,6 @@ end
 
 
 describe PryStackExplorer::Commands do
-
   before do
     Pry.config.hooks.add_hook(:when_started, :save_caller_bindings, WhenStartedHook)
     Pry.config.hooks.add_hook(:after_session, :delete_frame_manager, AfterSessionHook)
@@ -62,7 +61,7 @@ describe PryStackExplorer::Commands do
                                       "@second_method = __method__",
                                       "up",
                                       "@third_method = __method__",
-                                      "exit-all"), out=StringIO.new) do
+                                      "exit-all"), _out=StringIO.new) do
         @o.bing
       end
 
@@ -75,7 +74,7 @@ describe PryStackExplorer::Commands do
       redirect_pry_io(InputTester.new("@first_method = __method__",
                                       "up 2",
                                       "@second_method = __method__",
-                                      "exit-all"), out=StringIO.new) do
+                                      "exit-all"), _out=StringIO.new) do
         @o.bing
       end
 
@@ -88,7 +87,7 @@ describe PryStackExplorer::Commands do
         redirect_pry_io(InputTester.new("@first_method = __method__",
                                         "up bi",
                                         "@second_method = __method__",
-                                        "exit-all"), out=StringIO.new) do
+                                        "exit-all"), _out=StringIO.new) do
           @o.bing
         end
 
@@ -102,7 +101,7 @@ describe PryStackExplorer::Commands do
                                         "@second_method = __method__",
                                         "up b",
                                         "@third_method = __method__",
-                                        "exit-all"), out=StringIO.new) do
+                                        "exit-all"), _out=StringIO.new) do
           @o.bing
         end
 
@@ -127,11 +126,11 @@ describe PryStackExplorer::Commands do
         redirect_pry_io(InputTester.new("@method_list << self.class.to_s + '#' + __method__.to_s",
                                         'up Middle#bong',
                                         "@method_list << self.class.to_s + '#' + __method__.to_s",
-                                        "exit-all"), out=StringIO.new) do
+                                        "exit-all"), _out=StringIO.new) do
           @top.bing
         end
 
-        @top.method_list.should  == ['Bottom#bang', 'Middle#bong']
+        @top.method_list.should == ['Bottom#bang', 'Middle#bong']
       end
 
       ### ????? ###
@@ -140,27 +139,25 @@ describe PryStackExplorer::Commands do
       ### ????? ###
 
       it 'should allow partial class names' do
-          redirect_pry_io(InputTester.new("@method_list << self.class.to_s + '#' + __method__.to_s",
-                                        'up Mid#bong',
-                                        "@method_list << self.class.to_s + '#' + __method__.to_s",
-                                        "exit-all"), out=StringIO.new) do
+        redirect_pry_io(InputTester.new("@method_list << self.class.to_s + '#' + __method__.to_s",
+                                      'up Mid#bong',
+                                      "@method_list << self.class.to_s + '#' + __method__.to_s",
+                                      "exit-all"), _out=StringIO.new) do
           @top.bing
         end
 
-        @top.method_list.should  == ['Bottom#bang', 'Middle#bong']
-
+        @top.method_list.should == ['Bottom#bang', 'Middle#bong']
       end
 
       it 'should allow partial method names' do
-          redirect_pry_io(InputTester.new("@method_list << self.class.to_s + '#' + __method__.to_s",
-                                        'up Middle#bo',
-                                        "@method_list << self.class.to_s + '#' + __method__.to_s",
-                                        "exit-all"), out=StringIO.new) do
+        redirect_pry_io(InputTester.new("@method_list << self.class.to_s + '#' + __method__.to_s",
+                                      'up Middle#bo',
+                                      "@method_list << self.class.to_s + '#' + __method__.to_s",
+                                      "exit-all"), _out=StringIO.new) do
           @top.bing
         end
 
-        @top.method_list.should  == ['Bottom#bang', 'Middle#bong']
-
+        @top.method_list.should == ['Bottom#bang', 'Middle#bong']
       end
 
       it 'should error if it cant find frame to match regex' do
@@ -181,7 +178,7 @@ describe PryStackExplorer::Commands do
       redirect_pry_io(InputTester.new("@first_method = __method__",
                                       "down",
                                       "@second_method = __method__",
-                                      "exit-all"), out=StringIO.new) do
+                                      "exit-all"), _out=StringIO.new) do
         @o.bing
       end
 
@@ -195,7 +192,7 @@ describe PryStackExplorer::Commands do
       redirect_pry_io(InputTester.new("@first_method = __method__",
                                       "down 2",
                                       "@second_method = __method__",
-                                      "exit-all"), out=StringIO.new) do
+                                      "exit-all"), _out=StringIO.new) do
         @o.bing
       end
 
@@ -208,7 +205,7 @@ describe PryStackExplorer::Commands do
         redirect_pry_io(InputTester.new("frame -1",
                                         "down bo",
                                         "@first_method = __method__",
-                                        "exit-all"), out=StringIO.new) do
+                                        "exit-all"), _out=StringIO.new) do
           @o.bing
         end
 
@@ -222,7 +219,7 @@ describe PryStackExplorer::Commands do
                                         "@second_method = __method__",
                                         "down b",
                                         "@third_method = __method__",
-                                        "exit-all"), out=StringIO.new) do
+                                        "exit-all"), _out=StringIO.new) do
           @o.bing
         end
 
@@ -248,7 +245,7 @@ describe PryStackExplorer::Commands do
                                         "@method_list << self.class.to_s + '#' + __method__.to_s",
                                         'down Middle#bong',
                                         "@method_list << self.class.to_s + '#' + __method__.to_s",
-                                        "exit-all"), out=StringIO.new) do
+                                        "exit-all"), _out=StringIO.new) do
           @top.bing
         end
 
@@ -269,7 +266,6 @@ describe PryStackExplorer::Commands do
         out.string.should =~ /Error: No frame that matches/
       end
     end
-
   end
 
   describe "frame" do
@@ -277,7 +273,7 @@ describe PryStackExplorer::Commands do
       it 'should jump to correct stack frame when given method name' do
         redirect_pry_io(InputTester.new("frame bi",
                                         "@first_method = __method__",
-                                        "exit-all"), out=StringIO.new) do
+                                        "exit-all"), _out=StringIO.new) do
           @o.bing
         end
 
@@ -293,13 +289,12 @@ describe PryStackExplorer::Commands do
 
         out.string.should =~ /Error: No frame that matches/
       end
-
     end
 
     it 'should move to the given frame in the call stack' do
       redirect_pry_io(InputTester.new("frame 2",
                                       "@first_method = __method__",
-                                      "exit-all"), out=StringIO.new) do
+                                      "exit-all"), _out=StringIO.new) do
         @o.bing
       end
 
@@ -329,7 +324,7 @@ describe PryStackExplorer::Commands do
         (1..3).each_with_index do |v, idx|
           redirect_pry_io(InputTester.new("frame -#{v}",
                                           "@frame = __method__",
-                                          "exit-all"), out=StringIO.new) do
+                                          "exit-all"), _out=StringIO.new) do
             Pry.start(o, :call_stack => call_stack)
           end
           o.frame.should == method_names[idx]
@@ -343,11 +338,11 @@ describe PryStackExplorer::Commands do
         def o.beta()  binding end
         def o.gamma() binding end
 
-        call_stack   = [o.alpha, o.beta, o.gamma]
-        (1..3).each_with_index do |v, idx|
+        call_stack = [o.alpha, o.beta, o.gamma]
+        (1..3).each_with_index do |v, _idx|
           redirect_pry_io(InputTester.new("frame -#{v}",
                                           "@frame_number = PryStackExplorer.frame_manager(_pry_).binding_index",
-                                          "exit-all"), out=StringIO.new) do
+                                          "exit-all"), _out=StringIO.new) do
             Pry.start(o, :call_stack => call_stack)
           end
           o.frame_number.should == call_stack.size - v

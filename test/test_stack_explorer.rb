@@ -1,7 +1,6 @@
 require 'helper'
 
 describe PryStackExplorer do
-
   describe "Pry.start" do
     before do
       Pry.config.hooks.add_hook(:when_started, :save_caller_bindings, WhenStartedHook)
@@ -21,7 +20,7 @@ describe PryStackExplorer do
 
     describe ":initial_frame option" do
       it 'should default to first frame when no option provided' do
-        redirect_pry_io(StringIO.new("@frame = __method__\nexit\n"), out=StringIO.new) do
+        redirect_pry_io(StringIO.new("@frame = __method__\nexit\n"), _out=StringIO.new) do
           @o.bing
         end
 
@@ -43,8 +42,7 @@ describe PryStackExplorer do
         def o.bong() bang end
         def o.bang() Pry.start(binding) end
 
-        redirect_pry_io(InputTester.new(
-                                        "@frames = SE.frame_manager(_pry_).bindings.take(3)",
+        redirect_pry_io(InputTester.new("@frames = SE.frame_manager(_pry_).bindings.take(3)",
                                         "exit-all")) do
           o.bing
         end
@@ -61,9 +59,9 @@ describe PryStackExplorer do
         class << o; attr_reader :frame; end
         def o.bing() bong end
         def o.bong() bang end
-        def o.bang() Pry.start(binding, :initial_frame => 1) end #*
+        def o.bang() Pry.start(binding, :initial_frame => 1) end
 
-        redirect_pry_io(StringIO.new("@frame = __method__\nexit-all\n"), out=StringIO.new) do
+        redirect_pry_io(StringIO.new("@frame = __method__\nexit-all\n"), _out=StringIO.new) do
           o.bing
         end
 
@@ -88,7 +86,7 @@ describe PryStackExplorer do
       it 'does not infinite loop when pry is started in MyObject#==' do
         o = Object.new
         def o.==(other)
-          binding.pry
+          binding.pry # rubocop:disable Lint/Debugger
         end
 
         redirect_pry_io(InputTester.new(":hello", "exit-all"), out=StringIO.new) do
@@ -163,8 +161,7 @@ describe PryStackExplorer do
     end
 
     describe "PryStackExplorer.create_and_push_frame_manager" do
-
-      it  "should create and push one new FrameManager" do
+      it "should create and push one new FrameManager" do
         PE.create_and_push_frame_manager(@bindings, @pry_instance)
         PE.frame_manager(@pry_instance).is_a?(PE::FrameManager).should == true
         PE.frame_managers(@pry_instance).count.should == 1
@@ -212,7 +209,7 @@ describe PryStackExplorer do
         PryStackExplorer.frame_manager(_pry_).prior_backtrace.should == _pry_.backtrace
       end
 
-      it  "should create and push multiple FrameManagers" do
+      it "should create and push multiple FrameManagers" do
         PE.create_and_push_frame_manager(@bindings, @pry_instance)
         PE.create_and_push_frame_manager(@bindings, @pry_instance)
         PE.frame_managers(@pry_instance).count.should == 2
@@ -229,7 +226,7 @@ describe PryStackExplorer do
     end
 
     describe "PryStackExplorer.frame_manager" do
-      it  "should have the correct bindings" do
+      it "should have the correct bindings" do
         PE.create_and_push_frame_manager(@bindings, @pry_instance)
         PE.frame_manager(@pry_instance).bindings.should == @bindings
       end

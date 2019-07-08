@@ -3,7 +3,6 @@ require 'helper'
 Pry.config.output = StringIO.new
 
 describe PryStackExplorer::FrameManager do
-
   before do
     @pry_instance = Pry.new
     @bindings = [binding, binding, binding, binding]
@@ -60,6 +59,4 @@ describe PryStackExplorer::FrameManager do
       @frame_manager.map { |v| v.eval("x") }.should == (0..(@bindings.size - 1)).to_a
     end
   end
-
 end
-

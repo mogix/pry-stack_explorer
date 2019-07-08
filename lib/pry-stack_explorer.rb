@@ -9,7 +9,6 @@ require "pry-stack_explorer/when_started_hook"
 require "binding_of_caller"
 
 module PryStackExplorer
-
   # short-hand for `PryStackExplorer`
   ::SE = self
 
@@ -95,7 +94,7 @@ module PryStackExplorer
       frame_hash.delete(_pry_) # this line should be unnecessary!
     end
 
-    alias_method :delete_frame_managers, :clear_frame_managers
+    alias delete_frame_managers clear_frame_managers
 
     # @return [PryStackExplorer::FrameManager] The currently active frame manager
     def frame_manager(_pry_)
@@ -107,10 +106,11 @@ module PryStackExplorer
     # @param [Binding] b2 Second binding.
     # @return [Boolean] Whether the `Binding`s are equal.
     def bindings_equal?(b1, b2)
-      (b1.eval('self').equal?(b2.eval('self'))) &&
-        (b1.eval('__method__') == b2.eval('__method__')) &&
-        (b1.eval('local_variables').map { |v| b1.eval("#{v}") }.equal?(
-         b2.eval('local_variables').map { |v| b2.eval("#{v}") }))
+      b1.eval('self').equal?(b2.eval('self')) &&
+      (b1.eval('__method__') == b2.eval('__method__')) &&
+      b1.eval('local_variables').map { |v| b1.eval("#{v}") }.equal?(
+        b2.eval('local_variables').map { |v| b2.eval("#{v}") }
+      )
     end
   end
 end

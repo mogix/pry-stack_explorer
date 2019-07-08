@@ -78,7 +78,7 @@ namespace :ruby do
     pkg.need_tar = false
   end
 
-  desc  "Generate gemspec file"
+  desc "Generate gemspec file"
   task :gemspec do
     File.open("#{spec.name}.gemspec", "w") do |f|
       f << spec.to_ruby

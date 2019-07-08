@@ -15,7 +15,7 @@ puts "Ruby version: #{RUBY_VERSION}"
 PE = PryStackExplorer
 
 class << Pry
-  alias_method :orig_reset_defaults, :reset_defaults
+  alias orig_reset_defaults reset_defaults
   def reset_defaults
     orig_reset_defaults
 
@@ -46,7 +46,7 @@ class InputTester
   end
 
   def readline(*)
-    @actions.shift.tap{ |line| @hist << line if @hist }
+    @actions.shift.tap { |line| @hist << line if @hist }
   end
 
   def rewind
@@ -73,7 +73,6 @@ def redirect_pry_io(new_in, new_out = StringIO.new)
 end
 
 def mock_pry(*args)
-
   binding = args.first.is_a?(Binding) ? args.shift : binding()
 
   input = InputTester.new(*args)
