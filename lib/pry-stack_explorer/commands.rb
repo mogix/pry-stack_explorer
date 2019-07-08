@@ -3,8 +3,8 @@ module PryStackExplorer
     include Pry::Helpers::Text
 
     TYPE_TO_COLOR = {
-      method: :cyan,
-      block:  :green
+      method: :red,
+      block:  :blue
     }
 
     private
@@ -66,6 +66,19 @@ module PryStackExplorer
         end
 
       desc = b.frame_description ? "#{b.frame_description}" : "#{frame_description(b)}"
+
+      case b.frame_type
+      when :method
+        desc = bright_cyan(desc)
+      when :block
+        desc = desc.sub(/block (?:\((\d+) levels\) )?in (?:<([\w_]+):([\w_]+)>|([\w_]+))/) do
+          levels = $1 ? "(#{$1} #{magenta('levels')}) " : nil
+          next "#{bright_green('block')} #{levels}in #{bright_cyan($4)}" if $4
+
+          "#{bright_green('block')} #{levels}in <#{red($2)}:#{bright_yellow($3)}>"
+        end
+      end
+
       sig = meth_obj ? "<#{signature_with_owner(meth_obj)}>" : ""
 
       self_clipped = "#{Pry.view_clip(b_self)}"
