@@ -1,5 +1,12 @@
 module PryStackExplorer
   module FrameHelpers
+    include Pry::Helpers::Text
+
+    TYPE_TO_COLOR = {
+      method: :cyan,
+      block:  :green
+    }
+
     private
 
     # @return [PryStackExplorer::FrameManager] The active frame manager for
@@ -50,7 +57,14 @@ module PryStackExplorer
       b_self = b.eval('self')
       meth_obj = Pry::Method.from_binding(b) if meth
 
-      type = b.frame_type ? "[#{b.frame_type}]".ljust(9) : ""
+      type =
+        if b.frame_type then
+          color = TYPE_TO_COLOR[b.frame_type]
+          "[#{(color ? send(color, b.frame_type) : b.frame_type)}]".ljust(9)
+        else
+          ""
+        end
+
       desc = b.frame_description ? "#{b.frame_description}" : "#{frame_description(b)}"
       sig = meth_obj ? "<#{signature_with_owner(meth_obj)}>" : ""
 
