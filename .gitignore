@@ -5,3 +5,7 @@ Makefile
 doc/
 pkg/
 .yardoc/
+/.bundle
+/vendor/bundle
+/bundle_bin
+Gemfile.lock
