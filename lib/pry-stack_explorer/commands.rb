@@ -94,6 +94,17 @@ module PryStackExplorer
     # @param [Pry::Method] meth_obj The method object.
     # @return [String] Signature for the method object in Class#method format.
     def signature_with_owner(meth_obj)
+      name_with_owner =
+        meth_obj.name_with_owner.sub(
+          /(?:([\w_:]+)([#.]))?([\w_]+)/
+        ) do
+          _, name, delimiter, method = *$~
+          if name then
+            ns, sep, mod = name.rpartition("::")
+            name = "#{blue("#{ns}#{sep}")}#{bright_yellow(mod)}#{delimiter}"
+          end
+          "#{name}#{cyan(method)}"
+        end
       if !meth_obj.undefined?
         args = meth_obj.parameters.inject([]) do |arr, (type, name)|
           name ||= (type == :block ? 'block' : "arg#{arr.size + 1}")
@@ -105,9 +116,9 @@ module PryStackExplorer
                  else '?'
                  end
         end
-        "#{meth_obj.name_with_owner}(#{args.join(', ')})"
+        "#{name_with_owner}(#{args.join(', ')})"
       else
-        "#{meth_obj.name_with_owner}(UNKNOWN) (undefined method)"
+        "#{name_with_owner}(#{magenta('UNKNOWN')}) (#{red('undefined method')})"
       end
     end
 
