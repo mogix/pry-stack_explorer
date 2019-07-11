@@ -66,7 +66,7 @@ module PryStackExplorer
           color = TYPE_TO_COLOR[b.frame_type] || TYPE_TO_COLOR[:default]
           "[#{(color ? send(color, b.frame_type) : b.frame_type)}]".ljust(9)
         else
-          ""
+          "(#{cyan('target')})"
         end
 
       desc =
