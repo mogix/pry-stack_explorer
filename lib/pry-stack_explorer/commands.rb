@@ -9,6 +9,8 @@ module PryStackExplorer
       default: :blue
     }
 
+    MIN_TAG_WIDTH = 9
+
     private
 
     # @return [PryStackExplorer::FrameManager] The active frame manager for
@@ -64,10 +66,15 @@ module PryStackExplorer
       type =
         if b.frame_type then
           color = TYPE_TO_COLOR[b.frame_type] || TYPE_TO_COLOR[:default]
-          "[#{(color ? send(color, b.frame_type) : b.frame_type)}]".ljust(9)
+          "[#{(color ? send(color, b.frame_type) : b.frame_type)}]"
         else
           "(#{cyan('target')})"
         end
+
+      len = strip_color(type).length
+      padding = len < MIN_TAG_WIDTH ? " " * (MIN_TAG_WIDTH - len) : nil
+      type = "#{type}#{padding}"
+
 
       desc =
         case b.frame_type
