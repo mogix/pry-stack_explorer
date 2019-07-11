@@ -3,8 +3,8 @@ module PryStackExplorer
     include Pry::Helpers::Text
 
     TYPE_TO_COLOR = {
-      method: :red,
-      block:  :blue
+      method:  :red,
+      default: :blue
     }
 
     private
@@ -59,7 +59,7 @@ module PryStackExplorer
 
       type =
         if b.frame_type then
-          color = TYPE_TO_COLOR[b.frame_type]
+          color = TYPE_TO_COLOR[b.frame_type] || TYPE_TO_COLOR[:default]
           "[#{(color ? send(color, b.frame_type) : b.frame_type)}]".ljust(9)
         else
           ""
