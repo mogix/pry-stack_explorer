@@ -4,6 +4,8 @@ module PryStackExplorer
 
     TYPE_TO_COLOR = {
       method:  :red,
+      class:   :cyan,
+      top:     :magenta,
       default: :blue
     }
 
@@ -39,11 +41,13 @@ module PryStackExplorer
       if b_method && b_method != :__binding__ && b_method != :__binding_impl__
         b_method.to_s
       elsif b_self.instance_of?(Module)
-        "<module:#{b_self}>"
+        ns, sep, mod = b_self.name.rpartition("::")
+        "<#{red('module')}:#{blue("#{ns}#{sep}")}#{bright_yellow(mod)}>"
       elsif b_self.instance_of?(Class)
-        "<class:#{b_self}>"
+        ns, sep, mod = b_self.name.rpartition("::")
+        "<#{red('class')}:#{blue("#{ns}#{sep}")}#{bright_yellow(mod)}>"
       else
-        "<main>"
+        "<#{bright_yellow('main')}>"
       end
     end
 
@@ -65,7 +69,17 @@ module PryStackExplorer
           ""
         end
 
-      desc = b.frame_description ? "#{b.frame_description}" : "#{frame_description(b)}"
+      desc =
+        case b.frame_type
+        when :class, :top
+          "#{frame_description(b)}"
+        else
+          if b.frame_description then
+            "#{b.frame_description}"
+          else
+            "#{frame_description(b)}"
+          end
+        end
 
       case b.frame_type
       when :method
