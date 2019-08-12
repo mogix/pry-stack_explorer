@@ -117,7 +117,7 @@ module PryStackExplorer
     def signature_with_owner(meth_obj)
       name_with_owner =
         meth_obj.name_with_owner.sub(
-          /(?:([\w_:]+)([#.]))?([\w_]+)/
+          /(?:([\w_:]+)([#.]))?([\w_\[\]=]+)/
         ) do
           _, name, delimiter, method = *$~
           if name then
